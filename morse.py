@@ -1,27 +1,35 @@
+from tkinter import * 
 import RPi.GPIO as GPIO
 import time
-from Tkinter import *
-import tkFont
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(8,GPIO.OUT)
-
-win = Tk()
-win.title("Task 5.3D Morse Code")
-myFont = tkFont.Font(family='Helvetica',size = 12, weight="bold")
-
-### Label creation
-Lb1 = Label(win, text = "Please enter your name ")
-Lb1.pack()
-
-### Word Limit
-word = StringVar()
-
-def letter_limit(*arg):
-	user_input =text.get()
-	if len(user_input)>12:
-		word.set(user_input[:12])
-word.trace_variable("w",letter_limit)
+ 
+root = Tk()
+ 
+def returnEntry(arg=None):
+    """Gets the result from Entry and return it to the Label"""
+ 
+    result = myEntry.get()
+    list_of_letters = list(result)
+    for  a in list:
+     letters_morse(a)
+    resultLabel.config(text=result)
+    myEntry.delete(0,END)
+ 
+# Create the Entry widget
+myEntry = Entry(root, width=20)
+myEntry.focus()
+myEntry.bind("<Return>",returnEntry)
+myEntry.pack()
+ 
+# Create the Enter button
+enterEntry = Button(root, text= "Enter", command=returnEntry)
+enterEntry.pack(fill=X)
+ 
+# Create and emplty Label to put the result in
+resultLabel = Label(root, text = "")
+resultLabel.pack(fill=X)
 
 def dot():
     GPIO.output(8,GPIO.HIGH)
@@ -225,21 +233,3 @@ def letters_morse(letter):
         dot()
         time.sleep(1)
         dot()
-
-def runProgram():
-	text = textBox.get()
-	for answer in text.lower():
-		letters_morse(answer)
-
-def closeProgram():
-	GPIO.cleanup()
-	win.quit()
-
-### WIDGETS ###
-generateButton = Button(win, text = 'Generate', font = myFont, command = runProgram,bg ='green',height =1, width = 5)
-generateButton.pack(side=TOP)
-
-exitButton = Button(win, text = 'Exit', font = myFont, command = closeProgram,bg ='red',height =1, width = 5)
-exitButton.pack(side= BOTTOM)
-
-win.mainloop()
